@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FieldShift — বাংলাদেশের কৃষকের স্মার্ট সহকারী</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Noto Sans Bengali','Hind Siliguri',sans-serif; background:#17452F; display:flex; flex-direction:column; align-items:center; gap:16px; padding:20px 8px; min-height:100vh; }
+h1.brand { color:#FFF3D5; font-size:22px; letter-spacing:1px; }
+p.tag { color:#BFE2A9; font-size:13px; }
+.fs-phone { width:min(375px,94vw); height:720px; max-height:78vh; border-radius:34px; border:3px solid #F5B638; overflow:hidden; position:relative; background:#FFF3D5; display:flex; flex-direction:column; box-shadow:0 14px 40px rgba(0,0,0,.4); }
+.fs-screen { flex:1; overflow-y:auto; padding:18px 16px 90px; display:none; }
+.fs-screen.active { display:block; }
+.fs-h1 { font-size:20px; font-weight:700; color:#17452F; margin:0 0 4px; }
+.fs-sub { font-size:13px; color:#5c6b52; margin:0 0 14px; }
+.fs-card { background:#fff; border-radius:16px; padding:14px; margin-bottom:12px; border:1px solid rgba(23,69,47,.08); }
+.fs-btn { display:block; width:100%; padding:13px; border:none; border-radius:14px; background:#17452F; color:#FFF3D5; font-size:16px; font-weight:700; cursor:pointer; text-align:center; }
+.fs-btn.yellow { background:#F5B638; color:#17452F; }
+.fs-input { width:100%; padding:12px; border-radius:12px; border:1.5px solid #d8cfae; background:#fff; font-size:15px; margin-bottom:10px; color:#17452F; font-family:inherit; }
+.fs-chip { display:inline-block; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:600; }
+.fs-label { font-size:12px; font-weight:600; color:#17452F; margin:0 0 5px; }
+.fs-back { position:absolute; top:12px; left:12px; z-index:5; width:34px; height:34px; border-radius:50%; border:none; background:rgba(23,69,47,.12); color:#17452F; font-size:18px; cursor:pointer; display:none; }
+.fs-navbar { position:absolute; bottom:0; left:0; right:0; height:64px; background:#17452F; display:flex; justify-content:space-around; align-items:center; border-radius:0 0 30px 30px; }
+.fs-navitem { display:flex; flex-direction:column; align-items:center; gap:2px; color:#9db8a6; font-size:10px; cursor:pointer; background:none; border:none; font-family:inherit; }
+.fs-navitem.on { color:#F5B638; }
+.fs-tabs { display:flex; gap:6px; overflow-x:auto; width:min(375px,94vw); padding:4px 2px; scrollbar-width:thin; }
+.fs-tab { flex:0 0 auto; padding:6px 12px; border-radius:999px; border:1.5px solid rgba(255,243,213,.4); background:transparent; color:#FFF3D5; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; font-family:inherit; }
+.fs-tab.on { background:#F5B638; color:#17452F; border-color:#F5B638; }
+.big-num { font-variant-numeric:tabular-nums; }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+.hint { color:#BFE2A9; font-size:12px; }
+</style>
+
+<style id="fieldshift-web-upgrade">
+:root{--fs-green:#17452F;--fs-gold:#F5B638;--fs-cream:#FFF3D5;--fs-line:#e6e8dc}
+html{scroll-behavior:smooth} body{padding:0 0 24px!important;gap:12px!important;min-height:100vh;background:#f5f7f1!important;align-items:stretch!important;color:#17452F}
+body:before{content:"";height:7px;background:linear-gradient(90deg,#17452F 0 72%,#F5B638 72%);display:block;width:100%}
+h1.brand{width:min(1380px,96vw);margin:20px auto 0!important;color:#17452F!important;font-size:30px!important;display:flex;align-items:center;gap:12px;letter-spacing:0!important}
+h1.brand:before{content:"🌱";display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:#F5B638;font-size:25px}
+p.tag{width:min(1380px,96vw);margin:0 auto!important;color:#718071!important;font-size:13px!important;padding-left:58px}
+.fs-tabs{width:min(1380px,96vw)!important;margin:12px auto 0!important;padding:8px!important;background:#17452F;border-radius:16px;gap:7px!important;box-shadow:0 8px 24px rgba(23,69,47,.12);scrollbar-width:thin}
+.fs-tab{padding:9px 14px!important;border-radius:10px!important;border:1px solid rgba(255,243,213,.22)!important;font-size:12px!important;transition:.18s}
+.fs-tab:hover{background:rgba(255,243,213,.15)}
+.fs-tab.on{background:#F5B638!important;color:#17452F!important;border-color:#F5B638!important}
+.fs-phone{width:min(1380px,96vw)!important;height:auto!important;min-height:690px;max-height:none!important;border:1px solid #e4e7dc!important;border-radius:22px!important;overflow:hidden!important;background:#FFFDF6!important;box-shadow:0 14px 40px rgba(23,69,47,.08)!important;margin:0 auto!important}
+.fs-screen{min-height:690px;padding:28px 30px 42px!important;overflow:visible!important}
+.fs-screen.active{display:block!important}
+.fs-h1{font-size:25px!important;letter-spacing:-.3px}
+.fs-sub{font-size:13px!important;margin-bottom:20px!important}
+.fs-card{border-radius:17px!important;box-shadow:0 3px 14px rgba(23,69,47,.035);padding:18px!important}
+.fs-btn{border-radius:12px!important;transition:transform .18s,filter .18s}
+.fs-btn:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.fs-input{border-color:#dfe4d7!important;border-radius:11px!important}
+.fs-back{top:16px!important;left:16px!important;background:#edf3e9!important}
+.fs-navbar{position:sticky!important;bottom:0!important;border-radius:0!important;margin:0 -30px -42px!important;padding:0 12px}
+.hint{width:min(1380px,96vw);margin:0 auto!important;color:#758575!important;text-align:center}
+/* Let content breathe on desktop while retaining the original mobile composition. */
+@media(min-width:900px){.fs-screen{padding-left:clamp(30px,5vw,76px)!important;padding-right:clamp(30px,5vw,76px)!important}.fs-screen>div[style*="grid-template-columns:1fr 1fr"]{max-width:900px}.fs-screen .fs-card{max-width:100%}}
+@media(max-width:700px){body{padding-bottom:14px!important}h1.brand{font-size:24px!important;margin-top:14px!important}p.tag{padding-left:58px}.fs-tabs{border-radius:12px}.fs-phone{width:96vw!important;min-height:650px;border-radius:17px!important}.fs-screen{min-height:650px;padding:22px 15px 34px!important}.fs-navbar{margin:0 -15px -34px!important}.fs-h1{font-size:21px!important}.fs-card{padding:14px!important}.fs-back{top:10px!important;left:10px!important}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<h1 class="brand">🌾 ফিল্ডশিফট</h1>
+<p class="tag">আপনার খামার। আপনার তথ্য। আপনার ভবিষ্যৎ।</p>
+<div class="fs-tabs" id="fsTabs"></div>
+<main class="fs-phone" aria-label="FieldShift কৃষি ব্যবস্থাপনা অ্যাপ">
+  <button class="fs-back" id="fsBack" onclick="fsGo(Math.max(0,cur-1))">←</button>
+
+  <!-- Screen 1: Welcome -->
+  <div class="fs-screen active" style="text-align:center;">
+    <div style="height:40px"></div>
+    <svg width="90" height="90" viewBox="0 0 90 90"><circle cx="45" cy="45" r="42" fill="#17452F"/><path d="M45 70 V40" stroke="#F5B638" stroke-width="5" stroke-linecap="round"/><path d="M45 48 C45 30 60 26 68 26 C68 42 58 48 45 48 Z" fill="#BFE2A9"/><path d="M45 58 C45 44 33 40 26 40 C26 53 35 58 45 58 Z" fill="#91A86B"/></svg>
+    <h2 style="font-size:26px;color:#17452F;margin:14px 0 2px;">ফিল্ডশিফট</h2>
+    <p style="font-size:12px;color:#91A86B;margin:0;font-weight:600;">আপনার খামার। আপনার তথ্য। আপনার ভবিষ্যৎ।</p>
+    <svg width="100%" height="150" viewBox="0 0 320 150" style="margin:18px 0;">
+      <rect x="0" y="90" width="320" height="60" rx="10" fill="#BFE2A9"/>
+      <circle cx="260" cy="45" r="22" fill="#F5B638"/>
+      <path d="M40 90 Q70 55 100 90 Z" fill="#91A86B"/><path d="M120 90 Q155 50 190 90 Z" fill="#17452F" opacity=".85"/>
+      <path d="M60 92 q3 -14 0 -24 M75 92 q-3 -14 0 -24" stroke="#F5B638" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <rect x="215" y="62" width="26" height="28" rx="4" fill="#CBE8F8"/><path d="M212 64 L228 50 L244 64 Z" fill="#17452F"/>
+    </svg>
+    <h3 style="font-size:19px;color:#17452F;margin:0 0 6px;">আপনার স্মার্ট কৃষি যাত্রা শুরু হোক</h3>
+    <p style="font-size:13px;color:#5c6b52;margin:0 0 16px;">ফসল, আবহাওয়া ও বাজারদর — সব এক অ্যাপে</p>
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
+      <button style="flex:1;padding:12px;border-radius:12px;border:2px solid #F5B638;background:#F5B638;color:#17452F;font-weight:700;font-family:inherit;">বাংলা</button>
+      <button style="flex:1;padding:12px;border-radius:12px;border:1.5px solid #d8cfae;background:#fff;color:#5c6b52;font-family:inherit;">English</button>
+    </div>
+    <button class="fs-btn yellow" onclick="fsGo(1)">শুরু করুন →</button>
+  </div>
+
+  <!-- Screen 2: Farm Setup -->
+  <div class="fs-screen">
+    <div class="eyebrow">FARM SETUP · 01 / 02</div>
+    <h2 class="fs-h1">আপনার জমির পরিচয় দিন</h2>
+    <p class="fs-sub">সঠিক তথ্য দিলে পরামর্শও হবে আরও নির্ভরযোগ্য।</p>
+    <div class="fs-card form-card">
+      <p class="fs-label">📍 আপনার জমির অবস্থান</p>
+      <div class="form-grid"><label>বিভাগ<select id="divisionSelect" class="fs-input"><option value="">বিভাগ বেছে নিন</option></select></label><label>জেলা<select id="districtSelect" class="fs-input" disabled><option value="">আগে বিভাগ বাছুন</option></select></label></div>
+      <label>উপজেলা / থানা<input id="upazilaInput" class="fs-input" placeholder="যেমন: সাভার, সদর, কালীগঞ্জ"></label>
+      <button class="outline-btn" onclick="requestFarmLocation()">◎ GPS দিয়ে আমার অবস্থান শনাক্ত করুন</button><p id="locationStatus" class="micro-note">আপনার অনুমতি ছাড়া location নেওয়া হবে না।</p>
+      <div class="form-grid"><label>জমির পরিমাণ<input id="farmArea" class="fs-input" type="number" min="0" step="0.1" value="2.5"></label><label>একক<select id="farmUnit" class="fs-input"><option>বিঘা</option><option>একর</option><option>শতক</option><option>হেক্টর</option></select></label></div>
+      <label>মাটির ধরন<select id="soilType" class="fs-input"><option value="">মাটির ধরন নির্বাচন করুন</option><option>বেলে মাটি</option><option>বেলে দোআঁশ</option><option>দোআঁশ</option><option>এঁটেল দোআঁশ</option><option>এঁটেল মাটি</option><option>পলি মাটি</option><option>পলি দোআঁশ</option><option>কাদা-পলি মাটি</option><option>জৈব / পিট মাটি</option><option>লবণাক্ত মাটি</option><option>চুনযুক্ত মাটি</option><option>পাহাড়ি / লাল মাটি</option><option>জানি না</option></select></label>
+      <label>আগের মৌসুমে কোন ফসল চাষ করেছেন?<select id="previousCrop" class="fs-input"><option value="">ফসল নির্বাচন করুন</option></select></label>
+      <label>একাধিক ফসল চাষ করলে এখানে লিখুন<input id="otherCrops" class="fs-input" placeholder="যেমন: ধান, মরিচ, বেগুন"></label>
+      <label>জমিতে সেচের ব্যবস্থা<select id="irrigationType" class="fs-input"><option>সেচ আছে</option><option>বৃষ্টির পানির ওপর নির্ভরশীল</option><option>আংশিক সেচ</option><option>জানি না</option></select></label>
+      <button class="fs-btn" onclick="saveFarmSetup();fsGo(2)">তথ্য সংরক্ষণ করুন →</button>
+    </div>
+  </div>
+
+  <!-- Screen 3: Dashboard -->
+  <div class="fs-screen" style="padding-bottom:80px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div><h2 class="fs-h1">আপনার কৃষি ড্যাশবোর্ড 🌾</h2><p class="fs-sub" style="margin:0;">📍 <span id="dashboardPlace">আপনার জমির অবস্থান সেট করুন</span> · <span id="dashboardDate">আজকের তারিখ</span></p></div>
+      <div style="width:42px;height:42px;border-radius:15px;background:#d7edb9;color:#1f6049;display:flex;align-items:center;justify-content:center;font-weight:700;">🌱</div>
+    </div>
+    <div class="fs-card" style="background:linear-gradient(135deg,#CBE8F8,#e8f5fd);display:flex;justify-content:space-between;align-items:center;">
+      <div><div style="font-size:22px;font-weight:800;color:#17452F;">আবহাওয়া</div><div style="font-size:12px;color:#17452F;font-weight:600;">লাইভ তথ্যের অপেক্ষায়</div></div>
+      <div style="text-align:right;font-size:12px;color:#17452F;">🌧️ বৃষ্টি: API প্রয়োজন<br>💧 মাটির আর্দ্রতা: সেন্সর/API প্রয়োজন<br>💨 বাতাস: API প্রয়োজন</div>
+    </div>
+    <div class="fs-card" style="border-left:5px solid #F5B638;">
+      <p style="margin:0;font-size:12px;font-weight:700;color:#b5851e;">⚠️ আজকের গুরুত্বপূর্ণ পরামর্শ</p>
+      <p style="margin:4px 0 0;font-size:13px;color:#17452F;">আপনার এলাকার আবহাওয়া ও জমির ডেটা যুক্ত হলে এখানে ব্যক্তিগত কৃষি-পরামর্শ দেখানো হবে।</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="fs-card" style="margin:0;background:#CBE8F8;cursor:pointer;" onclick="fsGo(3)"><div style="font-size:26px;">🛰️</div><b style="font-size:14px;color:#17452F;">আবহাওয়া ও স্যাটেলাইট</b><p style="font-size:11px;color:#43617a;margin:3px 0 0;">স্যাটেলাইট ভিউ ও আবহাওয়ার তথ্য</p></div>
+      <div class="fs-card" style="margin:0;background:#BFE2A9;cursor:pointer;" onclick="fsGo(4)"><div style="font-size:26px;">🔄</div><b style="font-size:14px;color:#17452F;">ফসল পরিকল্পনা</b><p style="font-size:11px;color:#4d6b3d;margin:3px 0 0;">পরবর্তী ফসল বেছে নিন</p></div>
+      <div class="fs-card" style="margin:0;background:#FFC6AD;cursor:pointer;" onclick="fsGo(7)"><div style="font-size:26px;">🤖</div><b style="font-size:14px;color:#17452F;">স্মার্ট সহকারী</b><p style="font-size:11px;color:#8a5a44;margin:3px 0 0;">কণ্ঠে প্রশ্ন করুন</p></div>
+      <div class="fs-card" style="margin:0;background:#FFF3D5;cursor:pointer;" onclick="fsGo(9)"><div style="font-size:26px;">💰</div><b style="font-size:14px;color:#17452F;">বাজারদর</b><p style="font-size:11px;color:#8a7a4a;margin:3px 0 0;">আজকের দাম দেখুন</p></div>
+    </div>
+    <div class="fs-navbar">
+      <button class="fs-navitem on">🏠<span>হোম</span></button>
+      <button class="fs-navitem" onclick="fsGo(8)">📅<span>ক্যালেন্ডার</span></button>
+      <button class="fs-navitem" onclick="fsGo(6)">🌱<span>মাটি</span></button>
+      <button class="fs-navitem" onclick="fsGo(11)">👤<span>প্রোফাইল</span></button>
+    </div>
+  </div>
+
+  <!-- Screen 4: Weather & NASA -->
+  <div class="fs-screen">
+    <div style="height:34px"></div>
+    <h2 class="fs-h1">আবহাওয়া ও স্যাটেলাইট তথ্য</h2>
+    <p class="fs-sub">আপনার জমির অবস্থান, স্যাটেলাইট ভিউ ও আবহাওয়া</p>
+    <div class="fs-card satellite-card"><div class="satellite-head"><div><span class="live-dot"></span><b>আপনার জমির স্যাটেলাইট ভিউ</b></div><span class="data-tag">GPS অনুমতি প্রয়োজন</span></div><div id="satelliteMap" class="map-placeholder"><div class="map-cross">⌖</div><b>আপনার জমি এখানে দেখানো হবে</b><p>GPS চালু করে “আমার জমি দেখুন” চাপুন।</p></div><button class="fs-btn" onclick="locateAndShowMap()">◎ আমার জমি দেখুন</button><p class="micro-note">স্যাটেলাইট ছবির তারিখ ও রেজল্যুশন মানচিত্র সেবার ওপর নির্ভর করবে। এটি সরাসরি ড্রোন/লাইভ ভিডিও নয়।</p></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="fs-card" style="margin:0;"><p class="fs-label">🌧️ বৃষ্টিপাত</p><b style="font-size:16px;color:#17452F;">ডেটা সংযোগ প্রয়োজন</b><p style="font-size:11px;color:#5c6b52;margin:3px 0 0;">লাইভ বৃষ্টিপাতের ডেটা পাওয়া যায়নি</p></div>
+      <div class="fs-card" style="margin:0;"><p class="fs-label">💧 মাটির আর্দ্রতা</p><b style="font-size:16px;color:#17452F;">ডেটা সংযোগ প্রয়োজন</b><p style="font-size:11px;color:#5c6b52;margin:3px 0 0;">মাটির আর্দ্রতার সেন্সর/API প্রয়োজন</p></div>
+      <div class="fs-card" style="margin:0;"><p class="fs-label">🌿 উদ্ভিদের স্বাস্থ্য (NDVI)</p><b style="font-size:16px;color:#2e7d32;">স্যাটেলাইট বিশ্লেষণ প্রয়োজন</b><p style="font-size:11px;color:#5c6b52;margin:3px 0 0;">NDVI ডেটা সংযোগের পর বিশ্লেষণ হবে</p></div>
+      <div class="fs-card" style="margin:0;"><p class="fs-label">🌡️ তাপমাত্রা</p><b style="font-size:16px;color:#17452F;">লাইভ আবহাওয়া সংযোগ প্রয়োজন</b><p style="font-size:11px;color:#5c6b52;margin:3px 0 0;">লাইভ পূর্বাভাস সংযোগ প্রয়োজন</p></div>
+    </div>
+    <div class="fs-card">
+      <p class="fs-label">আবহাওয়ার পূর্বাভাস</p><p class="micro-note">এখানে ৭ দিনের পূর্বাভাস দেখাতে আবহাওয়া API সংযোগ প্রয়োজন। নিচের গ্রাফটি সরানো হয়েছে, যাতে ডেমো সংখ্যাকে বাস্তব পূর্বাভাস মনে না হয়।</p>
+
+    </div>
+    <div class="fs-card" style="border-left:5px solid #CBE8F8;"><p style="font-size:12px;color:#17452F;margin:0;">ℹ️ <b>তথ্য সতর্কতা:</b> আবহাওয়া ও মাটির আর্দ্রতার লাইভ API যুক্ত না হওয়া পর্যন্ত এখানে কোনো অনুমানকে বাস্তব পরিমাপ হিসেবে দেখানো হবে না।</p></div>
+  </div>
+
+  <!-- Screen 5: Crop Rotation Planner -->
+  <div class="fs-screen">
+    <div style="height:34px"></div>
+    <h2 class="fs-h1">পরবর্তী ফসল বেছে নিন</h2>
+    <p class="fs-sub">আপনার ধান কাটা শেষ — এখন কী ফলাবেন?</p>
+    <div class="fs-card" style="border:2px solid #F5B638;">
+      <div style="display:flex;justify-content:space-between;align-items:center;"><b style="font-size:16px;color:#17452F;">🌾 ধান → 🫘 মুগডাল</b><span class="fs-chip" style="background:#F5B638;color:#17452F;">সবচেয়ে উপযুক্ত ✓</span></div>
+      <p style="font-size:12px;color:#5c6b52;margin:8px 0 6px;">✅ উপকার: মাটিতে নাইট্রোজেন বাড়ায়, কম পানি লাগে<br>⚠️ ঝুঁকি: বাজারদর কমতে পারে</p>
+      <div style="display:flex;gap:8px;font-size:11px;margin-bottom:10px;"><span class="fs-chip" style="background:#CBE8F8;color:#17452F;">💧 কম পানি</span><span class="fs-chip" style="background:#BFE2A9;color:#17452F;">🗓️ শীতকালীন</span></div>
+      <button class="fs-btn yellow" style="padding:9px;font-size:14px;" onclick="fsGo(5)">বিস্তারিত দেখুন</button>
+    </div>
+    <div class="fs-card">
+      <b style="font-size:16px;color:#17452F;">🌾 ধান → 🌼 সরিষা</b>
+      <p style="font-size:12px;color:#5c6b52;margin:8px 0 6px;">✅ উপকার: কম খরচে ভালো লাভ, রোগবালাই কম<br>⚠️ ঝুঁকি: আবহাওয়া খারাপে ফলন কমে</p>
+      <div style="display:flex;gap:8px;font-size:11px;margin-bottom:10px;"><span class="fs-chip" style="background:#CBE8F8;color:#17452F;">💧 খুব কম পানি</span><span class="fs-chip" style="background:#BFE2A9;color:#17452F;">🗓️ শীতকালীন</span></div>
+      <button class="fs-btn" style="padding:9px;font-size:14px;background:#e9e2c8;color:#5c6b52;" onclick="fsGo(5)">বিস্তারিত দেখুন</button>
+    </div>
+    <div class="fs-card">
+      <b style="font-size:16px;color:#17452F;">🌾 ধান → 🥬 সবজি</b>
+      <p style="font-size:12px;color:#5c6b52;margin:8px 0 6px;">✅ উপকার: মাছের খাবার হিসেবে দ্রুত নগদ আয়<br>⚠️ ঝুঁকি: সেচ ও যত্ন বেশি লাগে</p>
+      <div style="display:flex;gap:8px;font-size:11px;margin-bottom:10px;"><span class="fs-chip" style="background:#FFC6AD;color:#8a5a44;">💧 বেশি পানি</span><span class="fs-chip" style="background:#BFE2A9;color:#17452F;">🗓️ শীত + বসন্ত</span></div>
+      <button class="fs-btn" style="padding:9px;font-size:14px;background:#e9e2c8;color:#5c6b52;" onclick="fsGo(5)">বিস্তারিত দেখুন</button>
+    </div>
+  </div>
+
+  <!-- Screen 6: Crop Comparison -->
+  <div class="fs-screen">
+    <div style="height:34px"></div>
+    <h2 class="fs-h1">ফসল তুলনা করুন</h2>
+    <p class="fs-sub">ধান → মুগডাল বনাম ধান → সরিষা</p>
+    <div class="fs-card" style="padding:0;overflow:hidden;">
+      <table>
+        <tr style="background:#17452F;color:#FFF3D5;"><th style="padding:10px 8px;text-align:left;">তুলনা</th><th style="padding:10px 4px;">🫘 মুগডাল</th><th style="padding:10px 4px;">🌼 সরিষা</th></tr>
+        <tr><td style="padding:9px 8px;color:#5c6b52;">পানির প্রয়োজন</td><td style="text-align:center;font-weight:700;color:#17452F;">কম</td><td style="text-align:center;font-weight:700;color:#17452F;">খুব কম</td></tr>
+        <tr style="background:#faf5e6;"><td style="padding:9px 8px;color:#5c6b52;">মাটির উপকার</td><td style="text-align:center;font-weight:700;color:#2e7d32;">নাইট্রোজেন ↑↑</td><td style="text-align:center;font-weight:700;color:#2e7d32;">জৈব পদার্থ ↑</td></tr>
+        <tr><td style="padding:9px 8px;color:#5c6b52;">আনুমানিক খরচ/বিঘা</td><td style="text-align:center;font-weight:700;color:#17452F;" class="big-num">৳ ৮,৫০০</td><td style="text-align:center;font-weight:700;color:#17452F;" class="big-num">৳ ৫,২০০</td></tr>
+        <tr style="background:#faf5e6;"><td style="padding:9px 8px;color:#5c6b52;">আনুমানিক আয়/বিঘা</td><td style="text-align:center;font-weight:700;color:#2e7d32;" class="big-num">৳ ১৮,০০০</td><td style="text-align:center;font-weight:700;color:#2e7d32;" class="big-num">৳ ১৩,৫০০</td></tr>
+        <tr><td style="padding:9px 8px;color:#5c6b52;">মূল ঝুঁকি</td><td style="text-align:center;">দর পতন</td><td style="text-align:center;">কুয়াশা/শীত</td></tr>
+      </table>
+    </div>
+    <div class="fs-card" style="border-left:5px solid #F5B638;">
+      <p style="margin:0;font-size:12px;font-weight:700;color:#b5851e;">🎯 আমাদের সুপারিশ</p>
+      <p style="margin:5px 0 0;font-size:13px;color:#17452F;">আপনার মাটিতে নাইট্রোজেন কম এবং পরের মৌসুমে ধান ফলানোর পরিকল্পনা আছে — তাই <b>মুগডাল</b> বেশি উপকারী হবে। সরিষা চাইলে খরচও কমবে।</p>
+    </div>
+    <button class="fs-btn yellow">এই ফসলটি বেছে নিন ✓</button>
+  </div>
+
+  <!-- Screen 7: Soil Health -->
+  <div class="fs-screen">
+    <div style="height:34px"></div>
+    <h2 class="fs-h1">মাটির স্বাস্থ্য</h2>
+    <p class="fs-sub">রংপুর সদর • আপডেট: ২ সপ্তাহ আগে</p>
+    <div class="fs-card" style="display:flex;align-items:center;gap:16px;">
+      <svg width="90" height="90" viewBox="0 0 90 90"><circle cx="45" cy="45" r="38" fill="none" stroke="#eee3c2" stroke-width="9"/><circle cx="45" cy="45" r="38" fill="none" stroke="#91A86B" stroke-width="9" stroke-dasharray="183 239" stroke-linecap="round" transform="rotate(-90 45 45)"/><text x="45" y="50" text-anchor="middle" font-size="19" font-weight="800" fill="#17452F">৬৫</text><text x="45" y="63" text-anchor="middle" font-size="9" fill="#5c6b52">ভালো</text></svg>
+      <div><b style="color:#17452F;">সামগ্রিক স্কোর: ৬৫/১০০</b><p style="font-size:12px;color:#5c6b52;margin:4px 0 0;">মাটির অবস্থা ভালো, তবে নাইট্রোজেন বাড়ালে ফলন আরও বাড়বে।</p></div>
+    </div>
+    <div class="fs-card">
+      <p class="fs-label">মাটির উপাদান</p>
+      <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;font-size:12px;"><span>🧪 পিএইচ (সাম্য)</span><b style="color:#17452F;">৬.২ — ঠিক আছে</b></div><div style="height:8px;background:#eee3c2;border-radius:99px;margin-top:4px;"><div style="width:62%;height:8px;background:#91A86B;border-radius:99px;"></div></div></div>
+      <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;font-size:12px;"><span>🟢 নাইট্রোজেন (N)</span><b style="color:#b5851e;">কম — ৩৮</b></div><div style="height:8px;background:#eee3c2;border-radius:99px;margin-top:4px;"><div style="width:38%;height:8px;background:#F5B638;border-radius:99px;"></div></div></div>
+      <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;font-size:12px;"><span>🟡 ফসফরাস (P)</span><b style="color:#2e7d32;">ঠিক আছে — ৫৮</b></div><div style="height:8px;background:#eee3c2;border-radius:99px;margin-top:4px;"><div style="width:58%;height:8px;background:#91A86B;border-radius:99px;"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;"><span>🟠 পটাশিয়াম (K)</span><b style="color:#2e7d32;">ভালো — ৭১</b></div><div style="height:8px;background:#eee3c2;border-radius:99px;margin-top:4px;"><div style="width:71%;height:8px;background:#17452F;border-radius:99px;"></div></div></div>
+    </div>
+    <div class="fs-card"><p style="font-size:12px;margin:0;color:#5c6b52;">🍂 জৈব পদার্থ: <b style="color:#17452F;">২.৮%</b> (স্বাভাবিক ২–৪%)</p></div>
+    <div class="fs-card" style="border-left:5px solid #F5B638;"><p style="margin:0;font-size:12px;color:#17452F;">ℹ️ <b>মনে রাখবেন:</b> সঠিক তথ্যের জন্য নিকটস্থ কৃষি অফিসে মাটি পরীক্ষা করুন। পরীক্ষা ফলাফল এখানে লিখুন —</p></div>
+    <button class="fs-btn" style="background:#91A86B;">＋ নতুন মাটি পরীক্ষার ফলাফল দিন</button>
+  </div>
+
+  <!-- Screen 8: AI Assistant -->
+  <div class="fs-screen chatbot-screen">
+    <div class="eyebrow">FIELDSHIFT AI · কৃষি সহকারী</div><h2 class="fs-h1">আপনার পাশে কৃষি সহকারী</h2><p class="fs-sub">সহজ বাংলায় প্রশ্ন করুন—ফসল, রোগ, মাটি, সার বা আবহাওয়া নিয়ে।</p>
+    <div class="bot-status"><span class="live-dot"></span> সহকারী প্রস্তুত <span class="data-tag">প্রোটোটাইপ মোড</span></div>
+    <div id="chatMessages" class="chat-messages"><div class="chat-bubble bot">আসসালামু আলাইকুম! আপনার জমি ও ফসল সম্পর্কে কী জানতে চান? প্রশ্ন লিখুন।<small>FieldShift সহকারী</small></div></div>
+    <div class="quick-prompts"><button onclick="askBot('ধানের পাতায় হলদে দাগ পড়েছে, কী করব?')">🌾 ধানের সমস্যা</button><button onclick="askBot('মাটির ধরন অনুযায়ী কোন ফসল ভালো?')">🌱 ফসল নির্বাচন</button><button onclick="askBot('সারের সঠিক ব্যবহার কীভাবে জানব?')">🧪 সার ব্যবস্থাপনা</button><button onclick="askBot('আমার এলাকার আবহাওয়া কীভাবে দেখব?')">🌦️ আবহাওয়া</button></div>
+    <form class="chat-compose" onsubmit="sendChat(event)"><input id="chatInput" class="fs-input" placeholder="আপনার প্রশ্ন লিখুন…" autocomplete="off"><button class="send-btn" type="submit">➤</button></form>
+    <p class="micro-note">এটি এখন ডেমো সহকারী। নির্ভরযোগ্য AI উত্তর পেতে নিরাপদ backend ও AI API সংযোগ করতে হবে। জরুরি রোগ/কীট সমস্যায় স্থানীয় কৃষি কর্মকর্তার পরামর্শ নিন।</p>
+  </div>
+
+  <!-- Screen 9: Crop Calendar -->
+  <div class="fs-screen">
+    <div style="height:34px"></div>
+    <h2 class="fs-h1">ফসলের ক্যালেন্ডার</h2>
+    <p class="fs-sub">মুগডাল • <span id="calendarDateTime">তারিখ ও সময় লোড হচ্ছে…</span></p>
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+      <button class="fs-tab" style="border-color:#F5B638;color:#F5B638;">‹ আগের মাস</button><b style="color:#F5B638;align-self:center;">নভেম্বর</b><button class="fs-tab" style="border-color:#F5B638;color:#F5B638;">পরের মাস ›</button>
+    </div>
+    <div class="fs-card" style="padding:10px;">
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11px;color:#5c6b52;font-weight:700;"><span>র</span><span>সো</span><span>ম</span><span>বু</span><span>বৃ</span><span>শু</span><span>শনি</span></div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:13px;color:#17452F;margin-top:6px;gap:2px;">
+        <span style="padding:6px 0;"></span><span style="padding:6px 0;">১</span><span style="padding:6px 0;">২</span><span style="padding:6px 0;">৩</span><span style="padding:6px 0;">৪</span><span style="padding:6px 0;">৫</span><span style="padding:6px 0;">৬</span>
+        <span style="padding:6px 0;">৭</span><span style="padding:6px 0;background:#F5B638;border-radius:50%;font-weight:800;">৮</span><span style="padding:6px 0;">৯</span><span style="padding:6px 0;">১০</span><span style="padding:6px 0;border-radius:50%;background:#CBE8F8;">১১</span><span style="padding:6px 0;">১২</span><span style="padding:6px 0;">১৩</span>
+        <span style="padding:6px 0;">১৪</span><span style="padding:6px 0;">১৫</span><span style="padding:6px 0;border-radius:50%;background:#BFE2A9;">১৬</span><span style="padding:6px 0;">১৭</span><span style="padding:6px 0;">১৮</span><span style="padding:6px 0;">১৯</span><span style="padding:6px 0;">২০</span>
+      </div>
+      <div style="display:flex;gap:12px;font-size:10px;color:#5c6b52;margin-top:8px;justify-content:center;"><span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#CBE8F8;"></i> সেচ</span><span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#BFE2A9;"></i> সার</span><span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#F5B638;"></i> আজ</span></div>
+    </div>
+    <div class="fs-card" style="border-left:5px solid #CBE8F8;"><b style="font-size:13px;color:#17452F;">১১ নভেম্বর — সেচের রিমাইন্ডার 💧</b><p style="font-size:12px;color:#5c6b52;margin:4px 0 0;">মুগডাল ক্ষেতে হালকা সেচ দিন। সকাল ৮টায় নোটিফিকেশন পাবেন।</p></div>
+    <div class="fs-card" style="border-left:5px solid #BFE2A9;"><b style="font-size:13px;color:#17452F;">১৬ নভেম্বর — সার প্রয়োগ 🌱</b><p style="font-size:12px;color:#5c6b52;margin:4px 0 0;">ইউরিয়া সার ৫ কেজি/বিঘা দিন।</p></div>
+    <div class="fs-card" style="border-left:5px solid #FFC6AD;"><b style="font-size:13px;color:#17452F;">🚨 মৌসুমি সতর্কতা</b><p style="font-size:12px;color:#5c6b52;margin:4px 0 0;">নভেম্বরের শেষ সপ্তাহে হালকা শীতপ্রবাহের সম্ভাবনা — চারা ঢেকে রাখুন।</p></div>
+  </div>
+
+  <!-- Screen 10: Market Price -->
+  <div class="fs-screen">
+    <div class="eyebrow">BANGLADESH MARKET WATCH</div><h2 class="fs-h1">আজকের কৃষিপণ্যের বাজারদর</h2><p class="fs-sub">জেলা ও বাজারভিত্তিক দর—কৃষকের ন্যায্য বিক্রির সিদ্ধান্তে সহায়তা করতে।</p>
+    <div class="fs-card market-filter"><label>বাজারের জেলা<select id="marketDistrict" class="fs-input"><option>ঢাকা</option><option>গাজীপুর</option><option>নারায়ণগঞ্জ</option><option>চট্টগ্রাম</option><option>কুমিল্লা</option><option>সিলেট</option><option>রাজশাহী</option><option>বগুড়া</option><option>রংপুর</option><option>দিনাজপুর</option><option>খুলনা</option><option>যশোর</option><option>বরিশাল</option><option>ময়মনসিংহ</option></select></label><label>বাজার / হাটের নাম<input id="marketName" class="fs-input" placeholder="যেমন: কারওয়ান বাজার"></label><div class="market-date"><span>আজকের তারিখ</span><b id="marketDate">—</b><span>সর্বশেষ হালনাগাদ</span><b id="marketTime">—</b></div></div>
+    <div class="price-trust"><b>দামের নির্ভরযোগ্যতা</b><p>সরকারি / যাচাইকৃত বাজারদরের উৎস যুক্ত না হওয়া পর্যন্ত কোনো সংখ্যা দেখানো হচ্ছে না। দাম, একক, বাজার ও সংগ্রহের সময় একসঙ্গে প্রকাশ করা হবে।</p><span class="data-tag">লাইভ DAM/API সংযোগ অপেক্ষমাণ</span></div>
+    <div class="fs-card" style="padding:0;overflow:hidden"><table class="price-table"><thead><tr><th>পণ্য</th><th>দাম (৳)</th><th>একক</th><th>উৎস</th></tr></thead><tbody id="priceRows"><tr><td colspan="4" class="empty-price">লাইভ বাজারদর সংযুক্ত হলে এখানে প্রতিদিনের যাচাইকৃত দাম দেখাবে।</td></tr></tbody></table></div>
+    <div class="fs-card"><h3 class="mini-heading">দাম যাচাইয়ের নিয়ম</h3><ul class="trust-list"><li>একই পণ্যের একাধিক স্থানীয় বাজারের দর তুলনা</li><li>পাইকারি ও খুচরা দাম আলাদা করে দেখানো</li><li>প্রতি দামের সঙ্গে উৎস ও আপডেটের সময়</li><li>পুরোনো তথ্যকে স্পষ্টভাবে “পুরোনো” হিসেবে চিহ্নিত</li></ul></div>
+    <p class="micro-note">কৃষকের ক্ষতি এড়াতে অনুমানভিত্তিক বা বানানো বাজারদর দেখানো হবে না। প্রকৃত দৈনিক দর দেখাতে Department of Agricultural Marketing (DAM) বা যাচাইকৃত বাজার-তথ্য API/backend যুক্ত করতে হবে।</p>
+  </div>
+
+  <!-- Screen 11: Notifications -->
+  <div class="fs-screen">
+    <div class="eyebrow">YOUR FARM · ALERT CENTER</div><h2 class="fs-h1">আপনার জমির নোটিফিকেশন</h2><p class="fs-sub">আপনার জমির তথ্য ও এলাকার আবহাওয়ার ভিত্তিতে সতর্কবার্তা।</p>
+    <div class="notification-summary"><div><b id="notifToday">আজ</b><span>তারিখ</span></div><div><b>২ ধরনের</b><span>সতর্কতা</span></div><div><b>অন-অ্যাপ</b><span>নোটিফিকেশন</span></div></div>
+    <div class="fs-card notice-item"><span class="notice-icon">🌦️</span><div><b>এলাকার আবহাওয়ার আপডেট</b><p id="weatherNotice">আপনার জেলার লাইভ আবহাওয়া সংযোগ হলে বৃষ্টি, তাপমাত্রা ও ঝড়ের সতর্কতা এখানে দেখাবে।</p><small>আবহাওয়া API সংযোগ প্রয়োজন</small></div></div>
+    <div class="fs-card notice-item"><span class="notice-icon">🌱</span><div><b>জমির অবস্থা ও ফসলের যত্ন</b><p>আপনার মাটির ধরন, নির্বাচিত ফসল ও জমির তথ্য সংরক্ষণ করলে প্রাসঙ্গিক কাজের রিমাইন্ডার দেখানো যাবে।</p><small>আপনার জমির প্রোফাইলের ভিত্তিতে</small></div></div>
+    <div class="fs-card notice-item"><span class="notice-icon">💧</span><div><b>সেচ ও মাটির আর্দ্রতা</b><p>সেন্সর বা নির্ভরযোগ্য মাটির আর্দ্রতার ডেটা যুক্ত হলে সেচের সতর্কতা তৈরি হবে।</p><small>সেন্সর/API সংযোগ প্রয়োজন</small></div></div>
+    <div class="fs-card notice-item"><span class="notice-icon">📈</span><div><b>বাজারদরের পরিবর্তন</b><p>আপনার নির্বাচিত ফসলের বাজারদর প্রতিদিন যাচাইকৃত উৎস থেকে আপডেট হলে জানানো হবে।</p><small>বাজারদর API সংযোগ প্রয়োজন</small></div></div>
+    <div class="notice-settings"><b>নোটিফিকেশন সেটিংস</b><p>আপাতত ওয়েবসাইটের ভেতরেই নোটিফিকেশন দেখানো হবে।</p><label><input type="checkbox" checked> আবহাওয়া সতর্কতা</label><label><input type="checkbox" checked> জমির যত্নের রিমাইন্ডার</label><label><input type="checkbox" checked> বাজারদরের আপডেট</label></div>
+  </div>
+
+  <!-- Screen 12: Profile -->
+  <div class="fs-screen">
+    <div class="eyebrow">MY FIELDSHIFT ACCOUNT</div><h2 class="fs-h1">কৃষক প্রোফাইল</h2><p class="fs-sub">নিজের ও জমির তথ্য যোগ করুন—পরে পরিবর্তনও করতে পারবেন।</p>
+    <div class="fs-card profile-hero"><div class="avatar" id="profileAvatar">ক</div><div><b id="profileNameDisplay">আপনার নাম</b><p id="profilePlaceDisplay">আপনার এলাকার নাম</p><span class="data-tag">কৃষক প্রোফাইল</span></div></div>
+    <div class="fs-card"><h3 class="mini-heading">ব্যক্তিগত তথ্য</h3><label>নাম<input id="profileName" class="fs-input" placeholder="আপনার পূর্ণ নাম"></label><label>মোবাইল নম্বর<input id="profilePhone" class="fs-input" type="tel" placeholder="01XXXXXXXXX"></label><label>বিভাগ<select id="profileDivision" class="fs-input"><option value="">বিভাগ নির্বাচন</option></select></label><label>জেলা<input id="profileDistrict" class="fs-input" placeholder="আপনার জেলা"></label><label>গ্রাম / ইউনিয়ন<input id="profileVillage" class="fs-input" placeholder="গ্রাম বা ইউনিয়নের নাম"></label></div>
+    <div class="fs-card"><h3 class="mini-heading">জমির তথ্য</h3><label>জমির পরিমাণ<input id="profileLand" class="fs-input" placeholder="যেমন: ২ বিঘা"></label><label>প্রধান ফসল<input id="profileMainCrop" class="fs-input" placeholder="যেমন: ধান"></label><label>মাটির ধরন<input id="profileSoil" class="fs-input" placeholder="যেমন: দোআঁশ"></label></div>
+    <button class="fs-btn" onclick="saveProfile()">প্রোফাইল সংরক্ষণ করুন</button><p id="profileSaved" class="micro-note"></p>
+    <p class="micro-note">এই প্রোটোটাইপে তথ্য আপনার এই ডিভাইসের browser-এ সংরক্ষিত হবে। বাস্তব account sync ও নিরাপদ cloud backup-এর জন্য backend প্রয়োজন।</p>
+  </div>
+
+</main>
+<p class="hint">১২টি পেজ • GPS ও স্যাটেলাইট ভিউয়ের জন্য location permission প্রয়োজন • লাইভ বাজার/আবহাওয়া/AI ডেটা সংযোগ অপেক্ষমাণ</p>
+<script>
+(function(){
+  var names=["১ স্বাগতম","২ জমি সেটআপ","৩ ড্যাশবোর্ড","৪ আবহাওয়া","৫ ফসল পরিকল্পনা","৬ তুলনা","৭ মাটির স্বাস্থ্য","৮ সহকারী","৯ ক্যালেন্ডার","১০ বাজারদর","১১ নোটিফিকেশন","১২ প্রোফাইল"];
+  var tabs=document.getElementById('fsTabs');
+  window.fsGo=function(i){
+    window.cur=i;
+    var s=document.querySelectorAll('.fs-screen');
+    for(var j=0;j<s.length;j++){ s[j].classList.toggle('active', j===i); }
+    var t=tabs.querySelectorAll('.fs-tab');
+    for(var k=0;k<t.length;k++){ t[k].classList.toggle('on', k===i); }
+    tabs.children[i].scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+    document.getElementById('fsBack').style.display=i===0?'none':'block';
+  };
+  for(var i=0;i<names.length;i++){
+    (function(idx){
+      var b=document.createElement('button');
+      b.className='fs-tab'+(idx===0?' on':'');
+      b.textContent=names[idx];
+      b.onclick=function(){ fsGo(idx); };
+      tabs.appendChild(b);
+    })(i);
+  }
+  window.cur=0;
+})();
+</script>
+<footer style="width:min(1380px,96vw);margin:10px auto 0;text-align:center;color:#829082;font:12px sans-serif;padding:12px">© 2026 FieldShift · আপনার খামার। আপনার তথ্য। আপনার ভবিষ্যৎ।</footer>
+
+<style id="fields-modern-refresh">
+:root{--ink:#172d27;--muted:#718078;--mint:#e8f2eb;--lime:#c7e7a4;--sun:#f4c95d;--paper:#fbfcf8;--line:#e4eae2;--accent:#1f6049}
+body{background:radial-gradient(ellipse at 8% 0%,#e5f1e8 0,transparent 38%),#f4f7f3!important;font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif!important}
+body:before{height:5px;background:linear-gradient(90deg,#173b30,#4d9b70,#d4bc65)!important}
+h1.brand{font-size:29px!important;color:#173b30!important;letter-spacing:-.8px!important}h1.brand:before{content:'✳'!important;background:#dff0df!important;color:#1f6049;width:48px;height:48px;border-radius:16px;font-size:28px}
+p.tag{color:#718078!important}
+.fs-tabs{background:#173b30!important;border-radius:17px!important;box-shadow:0 12px 32px #173b3015!important;padding:9px!important}
+.fs-tab{border-radius:999px!important}.fs-tab.on{background:#d5edb8!important;border-color:#d5edb8!important;color:#173b30!important}
+.fs-phone{background:#fbfcf8!important;border:1px solid #dfe8df!important;border-radius:26px!important;box-shadow:0 22px 70px #1e483015!important}
+.fs-screen{padding-top:34px!important}.fs-h1{font-size:clamp(23px,2.5vw,31px)!important;letter-spacing:-.7px!important;color:#173b30!important}.fs-sub{color:#718078!important;line-height:1.65!important}
+.fs-card{border:1px solid #e7ece5!important;border-radius:20px!important;box-shadow:0 8px 24px #173b3008!important;background:#fff!important}
+.fs-btn{background:#1f6049!important;border-radius:14px!important;padding:14px!important;box-shadow:0 8px 18px #1f604922!important}.fs-btn.yellow{background:#d7edb9!important;color:#173b30!important}
+.fs-input{font:inherit!important;border:1px solid #dce6dc!important;border-radius:12px!important;padding:12px 13px!important;background:#fbfdf9!important;color:#173b30!important;margin-top:5px!important}.fs-input:focus{outline:3px solid #d7edb988;border-color:#75a889!important}
+.eyebrow{font:700 10px/1.4 Arial,sans-serif;letter-spacing:1.8px;color:#4f8c6b;margin-bottom:12px}.form-card{max-width:900px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-card label,.fs-screen label{display:block;font-size:12px;font-weight:700;color:#345548;margin-bottom:12px}.outline-btn{width:100%;border:1px solid #b9d6c0;background:#eff7ef;color:#245c43;padding:12px;border-radius:12px;font:700 13px inherit;cursor:pointer}.micro-note{font-size:11px!important;color:#87938a!important;line-height:1.6!important;margin:8px 0 14px!important}.satellite-card{padding:16px!important}.satellite-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;font-size:13px}.live-dot{display:inline-block;width:8px;height:8px;background:#5da879;border-radius:50%;margin-right:7px;box-shadow:0 0 0 4px #5da87920}.data-tag{font-size:10px!important;font-weight:700!important;color:#557461!important;background:#edf5ed!important;padding:5px 9px!important;border-radius:999px!important;white-space:nowrap}.map-placeholder{height:310px;border-radius:15px;background:linear-gradient(135deg,#dce9d7,#a9c6a0 45%,#e4e2c4);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;color:#244b37;position:relative;overflow:hidden;margin-bottom:13px}.map-placeholder:before,.map-placeholder:after{content:'';position:absolute;width:140%;height:1px;background:#fff8;transform:rotate(-22deg)}.map-placeholder:after{transform:rotate(34deg)}.map-placeholder p{font-size:12px;margin-top:5px}.map-cross{font-size:42px;color:#c05b3c;z-index:1}.map-placeholder b,.map-placeholder p{z-index:1}.map-frame{width:100%;height:310px;border:0;border-radius:15px;background:#e7eee5}.bot-status{font-size:12px;color:#426b54;margin:10px 0;background:#eef6ed;padding:10px 12px;border-radius:12px}.chat-messages{height:350px;overflow:auto;background:#f0f5ef;border:1px solid #e1e9df;border-radius:17px;padding:14px;display:flex;flex-direction:column;gap:12px}.chat-bubble{max-width:86%;padding:12px 14px;border-radius:16px;font-size:13px;line-height:1.6}.chat-bubble.bot{background:white;color:#244b37;border:1px solid #e1e9df;border-bottom-left-radius:4px}.chat-bubble.user{background:#1f6049;color:white;align-self:flex-end;border-bottom-right-radius:4px}.chat-bubble small{display:block;font-size:10px;opacity:.6;margin-top:6px}.quick-prompts{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}.quick-prompts button{border:1px solid #cfe0d0;background:white;color:#315e46;padding:8px 11px;border-radius:999px;font:12px inherit;cursor:pointer}.chat-compose{display:flex;gap:8px}.chat-compose .fs-input{flex:1;margin:0!important}.send-btn{width:48px;border:0;border-radius:13px;background:#d7edb9;color:#173b30;font-size:20px;cursor:pointer}.price-trust{background:#f0f6ed;border:1px solid #dcebd8;border-radius:16px;padding:15px;margin-bottom:12px}.price-trust b{font-size:13px;color:#27533b}.price-trust p{font-size:12px;color:#63756a;line-height:1.6;margin:6px 0 10px}.market-date{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;background:#f6f8f4;border-radius:12px;padding:12px;font-size:11px;color:#718078}.market-date b{font-size:12px;color:#254c39}.price-table{font-size:12px!important}.price-table th{background:#173b30;color:white;padding:13px 8px;text-align:left}.price-table td{padding:14px 8px;border-bottom:1px solid #edf0eb}.empty-price{text-align:center;color:#849188;line-height:1.7;padding:25px!important}.mini-heading{font-size:14px;color:#244b37;margin-bottom:12px}.trust-list{padding-left:18px;color:#64766a;font-size:12px;line-height:2}.notification-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}.notification-summary div{background:#eaf3e9;padding:13px 8px;border-radius:14px;text-align:center}.notification-summary b,.notification-summary span{display:block}.notification-summary b{font-size:12px;color:#24543c}.notification-summary span{font-size:10px;color:#78867b;margin-top:4px}.notice-item{display:flex;gap:13px;align-items:flex-start}.notice-icon{font-size:24px;background:#eff6ed;border-radius:12px;padding:9px}.notice-item b{font-size:13px;color:#244b37}.notice-item p{font-size:12px;line-height:1.6;color:#718078;margin:5px 0}.notice-item small{font-size:10px;color:#91a096}.notice-settings{background:#f1f6ef;border-radius:16px;padding:15px}.notice-settings b{font-size:13px}.notice-settings p,.notice-settings label{font-size:11px;color:#68796d;margin:8px 0}.profile-hero{display:flex;align-items:center;gap:15px;background:linear-gradient(120deg,#eaf4e9,#f7f8ed)!important}.avatar{width:62px;height:62px;border-radius:20px;background:#1f6049;color:#d7edb9;display:grid;place-items:center;font-size:27px;font-weight:800}.profile-hero b{font-size:17px;color:#1b4634}.profile-hero p{font-size:12px;color:#75847a;margin:4px 0 8px}.fs-navbar{background:#173b30!important}
+@media(max-width:700px){.fs-tabs{width:96vw!important}.form-grid{grid-template-columns:1fr}.map-placeholder,.map-frame{height:260px}.chat-messages{height:310px}.fs-screen{padding:24px 16px 36px!important}}
+</style>
+<script id="fields-modern-functionality">
+(function(){
+const divisions={"ঢাকা":["ঢাকা","গাজীপুর","গোপালগঞ্জ","কিশোরগঞ্জ","মাদারীপুর","মানিকগঞ্জ","মুন্সিগঞ্জ","নারায়ণগঞ্জ","নরসিংদী","রাজবাড়ী","শরীয়তপুর","টাঙ্গাইল","ফরিদপুর"],"চট্টগ্রাম":["চট্টগ্রাম","কক্সবাজার","কুমিল্লা","চাঁদপুর","ব্রাহ্মণবাড়িয়া","নোয়াখালী","ফেনী","লক্ষ্মীপুর","রাঙ্গামাটি","খাগড়াছড়ি","বান্দরবান"],"রাজশাহী":["রাজশাহী","বগুড়া","জয়পুরহাট","নওগাঁ","নাটোর","চাঁপাইনবাবগঞ্জ","পাবনা","সিরাজগঞ্জ"],"খুলনা":["খুলনা","বাগেরহাট","চুয়াডাঙ্গা","যশোর","ঝিনাইদহ","কুষ্টিয়া","মাগুরা","মেহেরপুর","নড়াইল","সাতক্ষীরা"],"বরিশাল":["বরিশাল","বরগুনা","ভোলা","ঝালকাঠি","পটুয়াখালী","পিরোজপুর"],"সিলেট":["সিলেট","হবিগঞ্জ","মৌলভীবাজার","সুনামগঞ্জ"],"রংপুর":["রংপুর","দিনাজপুর","গাইবান্ধা","কুড়িগ্রাম","লালমনিরহাট","নীলফামারী","পঞ্চগড়","ঠাকুরগাঁও"],"ময়মনসিংহ":["ময়মনসিংহ","জামালপুর","নেত্রকোণা","শেরপুর"]};
+const crops=["ধান (আমন)","ধান (বোরো)","ধান (আউশ)","গম","ভুট্টা","পাট","আলু","মিষ্টি আলু","সরিষা","তিল","তিসি","চিনাবাদাম","সয়াবিন","মসুর ডাল","মুগ ডাল","খেসারি","মাষকলাই","ছোলা","মটরশুঁটি","পেঁয়াজ","রসুন","আদা","হলুদ","মরিচ","বেগুন","টমেটো","ফুলকপি","বাঁধাকপি","লাউ","কুমড়া","শসা","করলা","ঢেঁড়স","পটল","বরবটি","পান","আখ","চা","আম","কাঁঠাল","লিচু","কলা","পেঁপে","পেয়ারা","নারিকেল","সুপারি","তরমুজ","তামাক","অন্যান্য"];
+const div=document.getElementById('divisionSelect'), dist=document.getElementById('districtSelect'), pdiv=document.getElementById('profileDivision');
+function fillDiv(sel){Object.keys(divisions).forEach(d=>sel.add(new Option(d,d)));} if(div)fillDiv(div);if(pdiv)fillDiv(pdiv);
+if(dist&&div)div.addEventListener('change',()=>{dist.innerHTML='<option value="">জেলা বেছে নিন</option>';(divisions[div.value]||[]).forEach(d=>dist.add(new Option(d,d)));dist.disabled=!div.value;});
+const cropSel=document.getElementById('previousCrop');if(cropSel)crops.forEach(c=>cropSel.add(new Option(c,c)));const md=document.getElementById('marketDistrict');if(md){md.innerHTML='';Object.keys(divisions).forEach(d=>{const g=document.createElement('optgroup');g.label=d;divisions[d].forEach(x=>g.appendChild(new Option(x,x)));md.appendChild(g);});}
+function bnDate(d){return new Intl.DateTimeFormat('bn-BD',{day:'numeric',month:'long',year:'numeric'}).format(d)}
+function updateClock(){const now=new Date();const d=document.getElementById('marketDate'),t=document.getElementById('marketTime'),n=document.getElementById('notifToday'),c=document.getElementById('calendarDateTime'),dd=document.getElementById('dashboardDate');if(d)d.textContent=bnDate(now);if(t)t.textContent=new Intl.DateTimeFormat('bn-BD',{hour:'numeric',minute:'2-digit',second:'2-digit'}).format(now);if(n)n.textContent=bnDate(now);if(dd)dd.textContent=bnDate(now);if(c)c.textContent=bnDate(now)+' · '+new Intl.DateTimeFormat('bn-BD',{hour:'numeric',minute:'2-digit',second:'2-digit'}).format(now);}
+updateClock();setInterval(updateClock,1000);
+window.saveFarmSetup=function(){const data={division:div?.value,district:dist?.value,upazila:document.getElementById('upazilaInput')?.value,area:document.getElementById('farmArea')?.value,unit:document.getElementById('farmUnit')?.value,soil:document.getElementById('soilType')?.value,crop:cropSel?.value,other:document.getElementById('otherCrops')?.value};localStorage.setItem('fsFarm',JSON.stringify(data));const st=document.getElementById('locationStatus');if(st)st.textContent='জমির তথ্য এই ডিভাইসে সংরক্ষণ করা হয়েছে।';};
+window.requestFarmLocation=function(){const st=document.getElementById('locationStatus');if(!navigator.geolocation){st.textContent='এই browser-এ GPS সুবিধা পাওয়া যাচ্ছে না।';return;}st.textContent='আপনার অনুমতির অপেক্ষায়…';navigator.geolocation.getCurrentPosition(pos=>{const {latitude,longitude}=pos.coords;localStorage.setItem('fsCoords',JSON.stringify({latitude,longitude}));st.textContent='অবস্থান পাওয়া গেছে। স্যাটেলাইট ভিউ পেজ ৪-এ দেখুন।';},err=>{st.textContent='অবস্থান পাওয়া যায়নি। Browser permission ও GPS settings পরীক্ষা করুন।';},{enableHighAccuracy:true,timeout:12000});};
+window.locateAndShowMap=function(){if(!navigator.geolocation){alert('এই browser-এ GPS নেই।');return;}const box=document.getElementById('satelliteMap');box.textContent='আপনার অবস্থান খোঁজা হচ্ছে…';navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude,lon=pos.coords.longitude;localStorage.setItem('fsCoords',JSON.stringify({latitude:lat,longitude:lon}));const frame=document.createElement('iframe');frame.className='map-frame';frame.loading='lazy';frame.referrerPolicy='no-referrer-when-downgrade';frame.title='আপনার জমির satellite map';frame.src='https://maps.google.com/maps?q='+lat+','+lon+'&t=k&z=17&output=embed';box.innerHTML='';box.appendChild(frame);},()=>{box.innerHTML='<b>অবস্থান পাওয়া যায়নি</b><p>Browser settings থেকে location permission দিন।</p>';},{enableHighAccuracy:true,timeout:15000});};
+function botReply(q){const x=q.toLowerCase();if(x.includes('হলদে')||x.includes('দাগ')||x.includes('রোগ')||x.includes('পোকা'))return 'পাতা বা গাছের সমস্যার কারণ নিশ্চিত করতে আক্রান্ত গাছের পরিষ্কার ছবি, ফসলের নাম, বয়স এবং সমস্যাটি কখন শুরু হয়েছে—এসব তথ্য দরকার। আপাতত আক্রান্ত গাছের ছবি তুলুন এবং স্থানীয় কৃষি অফিসে দেখান। শুধু লক্ষণ দেখে নির্দিষ্ট কীটনাশক ব্যবহার করবেন না।';if(x.includes('মাটি')||x.includes('ফসল নির্বাচন')||x.includes('কোন ফসল'))return 'ফসল বাছাই করতে মাটির ধরন, মৌসুম, পানি, আগের ফসল ও স্থানীয় বাজারদর একসঙ্গে বিবেচনা করতে হয়। আপনার জমির Page 2-এর তথ্য পূরণ করুন—তাহলে পরামর্শটি আরও প্রাসঙ্গিক করা যাবে।';if(x.includes('সার'))return 'সারের মাত্রা জমির মাটি পরীক্ষা ও ফসলের পর্যায়ের ওপর নির্ভর করে। মাটি পরীক্ষার ফল এবং ফসলের নাম ছাড়া নির্দিষ্ট মাত্রা বলা ঠিক হবে না। উপজেলা কৃষি অফিসের সুপারিশ অনুসরণ করুন।';if(x.includes('আবহাওয়া')||x.includes('বৃষ্টি'))return 'আপনার এলাকার নির্ভুল পূর্বাভাস দেখাতে জেলা/উপজেলা অনুযায়ী আবহাওয়া API সংযোগ প্রয়োজন। Page 4-এ আপনার অবস্থান সেট করুন; লাইভ ডেটা যুক্ত হলে সতর্কতা এখানে দেখানো যাবে।';if(x.includes('দাম')||x.includes('বাজার'))return 'বাজারদর জেলা, বাজার, পণ্যের মান ও পাইকারি/খুচরা ধরন অনুযায়ী বদলায়। Page 10-এ যাচাইকৃত দৈনিক DAM/বাজার ডেটা সংযোগ হলে উৎস ও সময়সহ দাম দেখানো হবে।';return 'আপনার প্রশ্নটি একটু বিস্তারিত লিখুন—কোন ফসল, কোন জেলা/উপজেলা, গাছের বয়স এবং কী সমস্যা হচ্ছে? এই সংস্করণটি ডেমো; নির্ভরযোগ্য AI পরামর্শের জন্য AI API/backend সংযোগ প্রয়োজন।';}
+window.askBot=function(q){const area=document.getElementById('chatMessages');const u=document.createElement('div');u.className='chat-bubble user';u.textContent=q;area.appendChild(u);const b=document.createElement('div');b.className='chat-bubble bot';b.textContent=botReply(q);area.appendChild(b);area.scrollTop=area.scrollHeight;};window.sendChat=function(e){e.preventDefault();const input=document.getElementById('chatInput');const q=input.value.trim();if(!q)return;askBot(q);input.value='';};
+window.saveProfile=function(){const ids=['profileName','profilePhone','profileDivision','profileDistrict','profileVillage','profileLand','profileMainCrop','profileSoil'];const o={};ids.forEach(id=>o[id]=document.getElementById(id)?.value||'');localStorage.setItem('fsProfile',JSON.stringify(o));document.getElementById('profileNameDisplay').textContent=o.profileName||'আপনার নাম';document.getElementById('profilePlaceDisplay').textContent=[o.profileVillage,o.profileDistrict,o.profileDivision].filter(Boolean).join(', ')||'আপনার এলাকার নাম';document.getElementById('profileAvatar').textContent=(o.profileName||'ক').trim().charAt(0);document.getElementById('profileSaved').textContent='✓ প্রোফাইল এই ডিভাইসে সংরক্ষিত হয়েছে।';};
+try{const o=JSON.parse(localStorage.getItem('fsProfile')||'{}');Object.keys(o).forEach(k=>{const el=document.getElementById(k);if(el)el.value=o[k];});if(o.profileName)saveProfile();}catch(e){}
+try{const f=JSON.parse(localStorage.getItem('fsFarm')||'{}');const place=document.getElementById('dashboardPlace');if(place)place.textContent=[f.upazila,f.district,f.division].filter(Boolean).join(', ')||'আপনার জমির অবস্থান সেট করুন';if(f.division&&div){div.value=f.division;div.dispatchEvent(new Event('change'));dist.value=f.district||'';}[['upazilaInput','upazila'],['farmArea','area'],['farmUnit','unit'],['soilType','soil'],['previousCrop','crop'],['otherCrops','other']].forEach(([id,k])=>{const el=document.getElementById(id);if(el&&f[k])el.value=f[k];});}catch(e){}
+})();
+</script>
+
+</body>
+</html>
